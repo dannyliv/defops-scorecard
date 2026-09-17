@@ -71,4 +71,4 @@ A `.nojekyll` file is included so static assets are served as-is.
 
 ## License
 
-MIT License — Copyright (c) 2026 Danny Livshits. Provided **without warranty**; use for diligence at your own risk. See [LICENSE](LICENSE).
+Apache License 2.0 — Copyright 2026 Danny Livshits. Provided **without warranty**; use for diligence at your own risk. See [LICENSE](LICENSE).
