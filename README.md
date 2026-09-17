@@ -40,7 +40,7 @@ Given the mean of **scored** dimensions and the count of scored dimensions at **
 | Verdict | Rule |
 |---------|------|
 | **Fund** | mean ≥ 2.5 **and** no dimension at 0 |
-| **Don’t fund** | mean < 1.5 **or** ≥ 2 dimensions at 0 |
+| **Don’t fund** | mean &lt; 1.5 **or** ≥ 2 dimensions at 0 |
 | **Gate** | everything else (including no scores yet) |
 
 ## How to use
