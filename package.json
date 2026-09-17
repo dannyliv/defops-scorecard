@@ -1,0 +1,17 @@
+{
+  "name": "defops-scorecard",
+  "version": "1.0.0",
+  "description": "**Patch · Revoke · Reconstruct**",
+  "scripts": {
+    "test": "playwright test",
+    "test:e2e": "playwright test",
+    "test:report": "playwright test && echo See e2e-report.md"
+  },
+  "keywords": [],
+  "author": "Danny Livshits",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@playwright/test": "^1.63.0"
+  },
+  "private": true
+}

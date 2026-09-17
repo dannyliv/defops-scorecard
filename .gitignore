@@ -1,0 +1,7 @@
+node_modules/
+test-results/
+playwright-report/
+e2e-results.json
+e2e/_tmp-import.json
+.playwright/
+_site/
