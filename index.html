@@ -1,305 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="DEFOPS Coverage Scorecard — score whether your ops can Patch, Revoke, and Reconstruct after AI agents and tools fail. Local-only diligence for AI defense vendors and internal programs." />
-  <meta name="theme-color" content="#0a0e17" />
-  <title>DEFOPS Coverage Scorecard</title>
-  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700&family=IBM+Plex+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/styles.css" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js" defer></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="DEFOPS is an evidence review framework for AI operations. Test your ability to patch, revoke and reconstruct before the next deployment decision.">
+  <link rel="canonical" href="https://dannyliv.github.io/defops-scorecard/">
+  <meta name="theme-color" content="#f4f2eb">
+  <title>DEFOPS | Operational evidence review</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="js/model.js" defer></script>
   <script src="js/app.js" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
-
-  <header class="site-header" role="banner">
-    <div class="header-inner">
-      <a class="brand" href="#home" aria-label="DEFOPS home">
-        <img src="favicon.svg" alt="" width="28" height="28" class="brand-mark" />
-        <span class="brand-text">DEFOPS</span>
-      </a>
-      <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu">
-        <span class="nav-toggle-bar"></span>
-        <span class="nav-toggle-bar"></span>
-        <span class="nav-toggle-bar"></span>
-      </button>
-      <nav class="site-nav" id="site-nav" aria-label="Primary">
-        <a href="#home" data-nav="home">Home</a>
-        <a href="#assessment" data-nav="assessment">Assessment</a>
-        <a href="#dashboard" data-nav="dashboard">Dashboard</a>
-        <a href="#profiles" data-nav="profiles">Profiles</a>
-        <a href="#data" data-nav="data">Data</a>
-        <a href="#about" data-nav="about">About</a>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#overview" aria-label="DEFOPS overview"><span class="brand-symbol" aria-hidden="true"><i></i><i></i><i></i></span><span>DEFOPS<span class="brand-subtitle">THE EVIDENCE WORKBENCH</span></span></a>
+      <div class="rail-label">WORKSPACE <span>01</span></div>
+      <nav class="site-nav" aria-label="Primary navigation">
+        <a href="#overview" data-nav="overview"><span class="nav-icon" aria-hidden="true">◫</span>Overview<span class="nav-index">01</span></a>
+        <a href="#assessment" data-nav="assessment"><span class="nav-icon" aria-hidden="true">⌑</span>Assessment<span class="nav-index">02</span></a>
+        <a href="#dashboard" data-nav="dashboard"><span class="nav-icon" aria-hidden="true">▤</span>Review<span class="nav-index">03</span></a>
+        <a href="#data" data-nav="data"><span class="nav-icon" aria-hidden="true">⇄</span>Data<span class="nav-index">04</span></a>
+        <a href="#framework" data-nav="framework"><span class="nav-icon" aria-hidden="true">⊞</span>The framework<span class="nav-index">05</span></a>
       </nav>
+      <div class="rail-bottom"><div class="local-indicator"><span></span>LOCAL WORKSPACE</div><p>Your assessment stays in this browser. Export a copy for your review.</p><a href="https://github.com/dannyliv/defops-scorecard" target="_blank" rel="noopener noreferrer">Source code <span aria-hidden="true">↗</span></a></div>
+    </aside>
+    <div class="workspace">
+      <header class="workspace-header"><span class="workspace-title">AI OPERATIONS <span>/</span> CONTROL EVIDENCE</span><span id="saved-state" class="saved-state" role="status">Local workspace</span></header>
+      <div id="demo-banner" class="demo-banner" role="region" aria-label="Sample assessment" hidden><div><span class="demo-dot" aria-hidden="true"></span><strong id="demo-label">Sample workspace</strong><span>Illustrative records. Your saved assessment is separate.</span></div><button type="button" id="exit-demo" class="button compact">Exit sample <span aria-hidden="true">↗</span></button></div>
+      <main id="main" tabindex="-1">
+        <div id="app-message" class="app-message" role="status" aria-live="polite"></div>
+        <section class="view overview-view" data-view="overview" id="overview">
+          <div class="hero-topline"><span class="eyebrow">DEFOPS / OPERATIONAL READINESS</span><span class="edition">FRAMEWORK V2</span></div>
+          <div class="hero"><div class="hero-copy"><h1>Make the next deployment<br>a decision you can <em>defend.</em></h1><p class="hero-lede">When an AI system fails, can you patch the path, revoke its access, and reconstruct what happened?</p><p class="hero-description">DEFOPS turns those questions into a scoped review of controls, test results, owners and evidence. See what is missing before you sign off.</p><div class="hero-actions"><a class="button primary" href="#assessment">Start assessment <span aria-hidden="true">↗</span></a><button type="button" id="load-sample" class="button secondary">Explore a sample <span aria-hidden="true">→</span></button></div></div><div class="hero-seal" aria-hidden="true"><span class="seal-top">CONTROL / EVIDENCE</span><div class="seal-grid"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><span class="seal-bottom">TEST. RECORD. REVIEW.</span></div></div>
+          <div class="overview-rule"><span>THREE QUESTIONS. NO SHORTCUTS.</span><span>01 / 03</span></div>
+          <div class="principle-grid">
+            <article class="principle"><div class="principle-top"><span class="principle-number">01</span><span class="tiny-label">CONTAIN THE PATH</span></div><div class="principle-art patch-art" aria-hidden="true"><span class="path-node"></span><i></i><span class="path-node patched">✓</span><i></i><span class="path-node"></span></div><h2>Can you patch?</h2><p>Close the exploit path. Test the fix where the system runs.</p><span class="principle-foot">PATCH CLOSURE</span></article>
+            <article class="principle"><div class="principle-top"><span class="principle-number">02</span><span class="tiny-label">STOP THE AUTHORITY</span></div><div class="principle-art revoke-art" aria-hidden="true"><span class="credential-lines"><i></i><i></i><i></i></span><span class="revoke-stop">×</span><span class="revoked-lines"><i></i><i></i><i></i></span></div><h2>Can you revoke?</h2><p>Remove an agent's permissions. Prove the access is gone.</p><span class="principle-foot">IDENTITY & REVOCATION</span></article>
+            <article class="principle"><div class="principle-top"><span class="principle-number">03</span><span class="tiny-label">RECOVER THE RECORD</span></div><div class="principle-art reconstruct-art" aria-hidden="true"><span><i></i><b>01</b></span><span><i></i><b>02</b></span><span><i></i><b>03</b></span><span><i></i><b>04</b></span></div><h2>Can you reconstruct?</h2><p>Trace actions, tools and outcomes through a usable record.</p><span class="principle-foot">TRAJECTORY RECONSTRUCTION</span></article>
+          </div>
+          <div class="overview-footer"><div><strong>Evidence before confidence.</strong><p>Seven controls. Three mandatory gates. Every open issue stays visible.</p></div><a class="text-link" href="#framework">Read the framework <span aria-hidden="true">↗</span></a></div>
+        </section>
+        <section class="view" data-view="assessment" id="assessment" hidden>
+          <div class="page-heading"><p class="eyebrow">02 / BUILD THE RECORD</p><h1>What can you prove?</h1><p>Define the deployment. Then record the evidence behind each control.</p></div>
+          <details class="scope-panel" open><summary><span><span class="step-number">01</span>Deployment scope</span><span class="summary-hint">Required for review</span></summary><form id="scope-form" class="scope-form"><div class="field"><label for="scope-system">System or service</label><input id="scope-system" name="system" placeholder="e.g. Support triage agent" maxlength="1000" autocomplete="off"></div><div class="field"><label for="scope-environment">Environment</label><input id="scope-environment" name="environment" placeholder="e.g. Production, EU region" maxlength="1000" autocomplete="off"></div><div class="field"><label for="scope-owner">Accountable owner</label><input id="scope-owner" name="owner" placeholder="Team or person" maxlength="1000" autocomplete="off"></div><div class="field"><label for="policy-max-age">Evidence freshness policy</label><div class="input-unit"><input id="policy-max-age" name="maxAgeDays" type="number" min="1" max="365" value="90"><span>days</span></div></div><div class="field full-width"><label for="scope-boundary">Deployment boundary</label><textarea id="scope-boundary" name="boundary" rows="2" placeholder="Which tools, identities, data and integrations are included?" maxlength="10000"></textarea><p class="helper">The age limit is your review policy, not a validated security threshold.</p></div></form></details>
+          <div class="section-heading"><h2><span class="step-number">02</span>Control evidence</h2><a href="#dashboard" class="text-link">Open review <span aria-hidden="true">↗</span></a></div>
+          <div class="assessment-layout"><nav id="control-nav" class="control-nav" aria-label="Assessment controls"></nav><div id="control-detail" class="control-detail"></div></div>
+        </section>
+        <section class="view" data-view="dashboard" id="dashboard" hidden>
+          <div class="page-heading"><p class="eyebrow">03 / DECISION SUPPORT</p><h1>The evidence, in view.</h1><p>Open issues remain visible. Strong controls cannot cancel a failed critical gate.</p></div>
+          <div class="review-verdict"><div><span class="tiny-label">REVIEW STATUS</span><h2 id="review-status">Incomplete</h2><p id="dashboard-scope" class="dashboard-scope"></p><p id="review-summary">Complete the scope and assess every applicable control.</p></div><a href="#assessment" class="button secondary">Continue assessment <span aria-hidden="true">↗</span></a></div>
+          <div class="metrics-row"><div class="metric"><span class="tiny-label">CONTROLS ASSESSED</span><strong id="metric-assessed">0 / 7</strong></div><div class="metric"><span class="tiny-label">EVIDENCE CHECKS PASSED</span><strong id="metric-passed">0 / 7</strong></div><div class="metric"><span class="tiny-label">CRITICAL GATES PASSED</span><strong id="metric-critical">0 / 3</strong></div></div>
+          <div class="section-heading"><h2>Non-negotiable gates</h2><span class="helper">All three must pass</span></div><div id="critical-gates" class="critical-gates"></div>
+          <div class="review-columns"><section class="open-actions-panel"><div class="section-heading"><h2>Next actions</h2><span class="tiny-label">RESOLVE & RETEST</span></div><ul id="open-actions" class="open-actions"></ul></section><section class="control-summary-panel"><div class="section-heading"><h2>All controls</h2><span class="tiny-label">THE FULL RECORD</span></div><div id="full-control-list" class="full-control-list"></div></section></div>
+          <p class="review-disclaimer">A complete record is ready for human review. It is not deployment approval, independent evidence verification, or a guarantee of protection.</p>
+        </section>
+        <section class="view" data-view="data" id="data" hidden>
+          <div class="page-heading"><p class="eyebrow">04 / YOUR WORKSPACE</p><h1>Keep the record.</h1><p>Export the assessment for review. Import a record with a preview before replacing your current work.</p></div>
+          <div class="data-grid"><section class="data-panel"><span class="panel-number">01 / EXPORT</span><h2>A portable review record.</h2><p>Download the scope, controls and review summary as a JSON snapshot.</p><button type="button" id="export-btn" class="button primary">Prepare export <span aria-hidden="true">↓</span></button><button type="button" id="download-export" class="button secondary" disabled>Download JSON</button><div class="snapshot-details"><label for="export-hash">EXPORTED FILE SHA-256</label><output id="export-hash" class="hash-output">Generate an export to see its file hash.</output><button type="button" id="copy-hash" class="button compact" disabled>Copy hash</button><p class="helper">Checks file integrity. Does not verify the underlying evidence.</p><details><summary>Export snapshot details</summary><pre id="export-snapshot">No export generated.</pre></details></div></section><section class="data-panel"><span class="panel-number">02 / IMPORT</span><h2>Bring a record into view.</h2><p>Choose a DEFOPS JSON file. Review the preview, then apply it when you are ready.</p><div class="field"><label for="import-file">Assessment file</label><input type="file" id="import-file" accept=".json,application/json"></div><div id="import-preview" class="import-preview" aria-live="polite"><p class="helper">No file selected.</p></div><button type="button" id="apply-import" class="button secondary" disabled>Apply imported assessment</button><button type="button" id="cancel-import" class="button secondary">Cancel import</button></section></div>
+          <section class="workspace-tools"><div><h2>Workspace tools</h2><p>Samples run separately from your saved assessment. Replacements keep one prior assessment as a recovery copy.</p></div><div class="workspace-tool-buttons"><button type="button" id="load-sample-data" class="button secondary">Explore open-issues sample</button><button type="button" id="load-ready-sample" class="button secondary">Explore complete sample</button><button type="button" id="restore-backup" class="button secondary">Restore previous assessment</button><button type="button" id="clear-assessment" class="button danger">Clear assessment</button></div></section><p class="review-disclaimer">Browser storage is not a backup. Export important work. Records and evidence references are self-reported; keep sensitive details in your approved evidence system.</p>
+        </section>
+        <section class="view" data-view="framework" id="framework" hidden>
+          <div class="page-heading"><p class="eyebrow">05 / THE DEFOPS FRAMEWORK</p><h1>Operational claims.<br>Testable evidence.</h1><p>DEFOPS asks whether your team can contain failures and explain what happened, within a defined deployment boundary.</p></div>
+          <div class="framework-intro"><h2>A review gate,<br>not an average.</h2><div><p>Assess seven controls against a shared rubric. Patching, revocation and reconstruction are mandatory. A strong result elsewhere cannot compensate for one of these failing.</p><p>Every applicable control needs a passing test, evidence, an owner, a date and a documented result. Noncritical exclusions need an owner and rationale.</p></div></div>
+          <div class="section-heading"><h2>The evidence rubric</h2><span class="tiny-label">UNKNOWN IS NOT ZERO</span></div>
+          <div class="rubric-grid"><article><span>?</span><h3>Unassessed</h3><p>No rating recorded. The outcome remains unknown.</p></article><article><span>0</span><h3>Absent or failed</h3><p>The control is missing or the test failed.</p></article><article><span>1</span><h3>Defined</h3><p>A process exists but has not passed a representative test.</p></article><article><span>2</span><h3>Exercised</h3><p>Passed a representative exercise with supporting evidence.</p></article><article><span>3</span><h3>Deployed & reviewed</h3><p>Passed in deployed conditions with a named reviewer.</p></article></div>
+          <div class="section-heading"><h2>Seven controls to examine</h2><span class="tiny-label">SCOPE / TEST / EVIDENCE</span></div><div id="framework-controls" class="framework-controls"></div>
+          <div class="framework-outcomes"><h2>What the result means</h2><div><span class="badge missing">Incomplete</span><p>Scope, assessments or required evidence are still missing.</p></div><div><span class="badge failed">Needs remediation</span><p>A control failed, a rating is below the threshold, or evidence needs a retest.</p></div><div><span class="badge passed">Ready for review</span><p>The recorded requirements are complete. A human still needs to review the evidence and decide.</p></div></div>
+          <p class="review-disclaimer">DEFOPS is a decision support framework, not a validated predictor of security outcomes or a certification. Evidence freshness is an adjustable policy. The tool checks the record you enter; it does not inspect evidence sources or validate operational claims.</p>
+        </section>
+      </main>
+      <footer class="workspace-footer"><span>DEFOPS <span class="footer-dot">/</span> PATCH. REVOKE. RECONSTRUCT.</span><a href="https://github.com/dannyliv/defops-scorecard" target="_blank" rel="noopener noreferrer">Open source <span aria-hidden="true">↗</span></a></footer>
     </div>
-  </header>
-
-  <main id="main">
-    <!-- HOME -->
-    <section id="home" class="view view-home" data-view="home" hidden>
-      <div class="hero">
-        <p class="eyebrow">Operational coverage · AI defense diligence</p>
-        <h1>DEFOPS Coverage Scorecard</h1>
-        <p class="hero-sub">Patch · Revoke · Reconstruct</p>
-        <p class="hero-lede">
-          Score whether <em>your</em> org’s ops can close the loop after agents and tools fail —
-          not whether research benchmarks look good. Built for diligence on AI defense vendors
-          and internal programs.
-        </p>
-        <div class="hero-actions">
-          <a class="btn btn-primary" href="#assessment">Start assessment</a>
-          <a class="btn btn-ghost" href="#about">What is DEFOPS?</a>
-        </div>
-        <div class="stat-row" role="list">
-          <div class="stat-card" role="listitem">
-            <span class="stat-value">7</span>
-            <span class="stat-label">Dimensions</span>
-          </div>
-          <div class="stat-card" role="listitem">
-            <span class="stat-value">Local</span>
-            <span class="stat-label">Only · no telemetry</span>
-          </div>
-          <div class="stat-card" role="listitem">
-            <span class="stat-value">3</span>
-            <span class="stat-label">Fund / Gate / Don’t fund</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ASSESSMENT -->
-    <section id="assessment" class="view view-assessment" data-view="assessment" hidden>
-      <div class="section-head">
-        <h2>Assessment</h2>
-        <p class="section-lede">
-          Score each dimension 0–3. Notes are optional and stay in your browser.
-          Progress and scores auto-save to localStorage.
-        </p>
-        <div class="progress-wrap" aria-live="polite">
-          <div class="progress-meta">
-            <span id="progress-label">0 of 7 scored</span>
-            <span id="progress-pct">0%</span>
-          </div>
-          <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progress-bar">
-            <div class="progress-fill" id="progress-fill"></div>
-          </div>
-        </div>
-      </div>
-      <div id="dim-list" class="dim-list"></div>
-      <div class="assessment-footer">
-        <a class="btn btn-primary" href="#dashboard">View dashboard</a>
-        <button type="button" class="btn btn-ghost" id="btn-reset-scores">Reset scores</button>
-      </div>
-    </section>
-
-    <!-- DASHBOARD -->
-    <section id="dashboard" class="view view-dashboard" data-view="dashboard" hidden>
-      <div class="section-head">
-        <h2>Dashboard</h2>
-        <p class="section-lede">
-          Radar of your seven DEFOPS dimensions. Verdict follows mean score and zero-dimension rules.
-        </p>
-      </div>
-      <div class="dash-grid">
-        <div class="card dash-chart-card">
-          <canvas id="radar-chart" aria-label="DEFOPS radar chart" role="img"></canvas>
-          <p class="chart-hint" id="chart-empty-hint" hidden>Score at least one dimension to populate the radar.</p>
-        </div>
-        <div class="dash-side">
-          <div class="card verdict-card">
-            <h3 class="card-title">Verdict</h3>
-            <div id="verdict-badge" class="verdict-badge verdict-gate" aria-live="polite">Gate</div>
-            <p id="verdict-reason" class="verdict-reason">Complete the assessment for a diligence verdict.</p>
-          </div>
-          <div class="card score-summary-card">
-            <h3 class="card-title">Overall</h3>
-            <div class="score-big">
-              <span id="overall-mean" class="score-mean">—</span>
-              <span class="score-sep">/</span>
-              <span class="score-max">3.0</span>
-            </div>
-            <p class="score-pct-line"><span id="overall-pct">—</span> of max coverage</p>
-            <ul class="score-breakdown" id="score-breakdown"></ul>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- PROFILES -->
-    <section id="profiles" class="view view-profiles" data-view="profiles" hidden>
-      <div class="section-head">
-        <h2>Sample profiles</h2>
-        <p class="section-lede">
-          Load illustrative baselines. These overwrite current scores and notes in localStorage.
-        </p>
-      </div>
-      <div class="profile-grid">
-        <article class="card profile-card">
-          <h3>Research-demo</h3>
-          <p class="profile-tag">High claims · low ops</p>
-          <p>
-            Looks strong in papers and demos: polished eval slides, impressive leaderboard numbers.
-            Close-loop ops are thin — patching is ad hoc, revocation unproven, production stack
-            diverges from the red-team harness.
-          </p>
-          <ul class="profile-bullets">
-            <li>Strong narrative on “independent” evals that aren’t production-faithful</li>
-            <li>Weak agent identity kill-switch and key lifecycle</li>
-            <li>Typical diligence outcome: Gate or Don’t fund until ops catch up</li>
-          </ul>
-          <button type="button" class="btn btn-primary" id="load-research-demo" aria-label="Load Research-demo sample profile">
-            Load Research-demo
-          </button>
-        </article>
-        <article class="card profile-card">
-          <h3>Ops-ready</h3>
-          <p class="profile-tag profile-tag-mint">High close-loop</p>
-          <p>
-            Measured ownership of Patch / Revoke / Reconstruct. Credentials die when killed,
-            trajectories hold up under spoof pressure, registry gates and shared-state detection
-            are exercised regularly — not just documented once.
-          </p>
-          <ul class="profile-bullets">
-            <li>Documented + tested patch loops with proof-of-closure</li>
-            <li>Scoped AI API keys, rotation, and leak detection</li>
-            <li>Typical diligence outcome: Fund when mean stays high and no zeros</li>
-          </ul>
-          <button type="button" class="btn btn-primary" id="load-ops-ready" aria-label="Load Ops-ready sample profile">
-            Load Ops-ready
-          </button>
-        </article>
-      </div>
-      <p class="profiles-note" id="profiles-status" role="status" aria-live="polite"></p>
-    </section>
-
-    <!-- DATA -->
-    <section id="data" class="view view-data" data-view="data" hidden>
-      <div class="section-head">
-        <h2>Data</h2>
-        <p class="section-lede">Export, import, hash, or clear. Everything stays in this browser unless you move it.</p>
-      </div>
-      <div class="privacy-banner" role="note">
-        <strong>Private by design.</strong> Scores and notes never leave your browser. There is no
-        analytics, no account, and no server-side storage. Export only if you choose to share.
-      </div>
-      <div class="data-actions card">
-        <div class="data-row">
-          <div>
-            <h3>Export JSON</h3>
-            <p>Download the current assessment as a portable JSON file.</p>
-          </div>
-          <button type="button" class="btn btn-primary" id="btn-export" aria-label="Export assessment as JSON">Export JSON</button>
-        </div>
-        <div class="data-row">
-          <div>
-            <h3>Import JSON</h3>
-            <p>Replace current scores with a previously exported file.</p>
-          </div>
-          <label class="btn btn-ghost file-label">
-            Import JSON
-            <input type="file" id="import-file" accept="application/json,.json" hidden aria-label="Choose JSON file to import" />
-          </label>
-        </div>
-        <div class="data-row">
-          <div>
-            <h3>Copy SHA-256 of export</h3>
-            <p>Hash the current export payload (Web Crypto) for integrity checks when sharing offline.</p>
-          </div>
-          <button type="button" class="btn btn-ghost" id="btn-hash" aria-label="Copy SHA-256 hash of export">Copy SHA-256</button>
-        </div>
-        <div class="data-row data-row-danger">
-          <div>
-            <h3>Clear all</h3>
-            <p>Wipe localStorage scores and notes for this site.</p>
-          </div>
-          <button type="button" class="btn btn-danger" id="btn-clear" aria-label="Clear all local assessment data">Clear all</button>
-        </div>
-        <p class="data-status" id="data-status" role="status" aria-live="polite"></p>
-        <pre class="hash-display" id="hash-display" hidden></pre>
-      </div>
-    </section>
-
-    <!-- ABOUT -->
-    <section id="about" class="view view-about" data-view="about" hidden>
-      <div class="section-head">
-        <h2>About DEFOPS</h2>
-      </div>
-      <div class="about-prose card">
-        <h3>What DEFOPS is</h3>
-        <p>
-          DEFOPS (Defense Operations) coverage asks a simple operational question:
-          after agents or tools fail — via exploit path, credential theft, spoofed summaries,
-          or supply-chain slip — can your organization <strong>Patch</strong>, <strong>Revoke</strong>,
-          and <strong>Reconstruct</strong>?
-        </p>
-        <p>
-          This scorecard is for diligence on AI defense vendors and internal programs.
-          It scores whether <em>ops can close loops</em>, not whether research benchmarks
-          look impressive in isolation.
-        </p>
-
-        <h3>Why research metrics ≠ ops outcomes</h3>
-        <p>
-          Leaderboards, paper evals, and staged demos measure capability under curated
-          conditions. They rarely prove that you can ship a fix from a known exploit path
-          and keep it closed; kill agent credentials and confirm they stay dead; or rebuild
-          what happened when logs are incomplete or adversarial.
-        </p>
-        <p>
-          Independent evals that run on demoware — different models, tools, memory, or
-          privilege model than production — inflate confidence. DEFOPS treats production
-          fidelity and close-loop ownership as first-class dimensions.
-        </p>
-
-        <h3>The seven dimensions</h3>
-        <ol class="about-dims">
-          <li><strong>Patch / close loop</strong> — Ship a fix from a known exploit path; prove it stays closed.</li>
-          <li><strong>Agent identity &amp; revocation</strong> — Kill agent/tool credentials; confirm they stay dead.</li>
-          <li><strong>Trajectory &amp; summary integrity</strong> — Logs/summaries resist spoof/omission; reconstruct events.</li>
-          <li><strong>Credential &amp; key lifecycle (AI APIs)</strong> — Rotate, scope, and detect leaks for model/tool keys.</li>
-          <li><strong>Registry &amp; publish controls</strong> — Who can publish tools/skills/agents; review gates; pins.</li>
-          <li><strong>Shared-state / improvised-C2 detection</strong> — Catch collusion via shared memory, files, side channels.</li>
-          <li><strong>Independent eval fidelity</strong> — Third-party/red-team evals match the production stack.</li>
-        </ol>
-
-        <h3>Verdict rules</h3>
-        <ul>
-          <li><strong>Fund</strong> — mean ≥ 2.5 and no dimension at 0</li>
-          <li><strong>Don’t fund</strong> — mean &lt; 1.5 or ≥ 2 dimensions at 0</li>
-          <li><strong>Gate</strong> — everything else (including incomplete assessments)</li>
-        </ul>
-        <p>
-          Rubric: <span class="mono">0</span> Missing / unknown ·
-          <span class="mono">1</span> Manual / ad hoc ·
-          <span class="mono">2</span> Documented process, partial automation ·
-          <span class="mono">3</span> Measured, owned, tested regularly
-        </p>
-
-        <h3>Privacy &amp; license</h3>
-        <p>
-          All data stays in your browser (localStorage). No telemetry. Export only when you choose.
-          Source is Apache License 2.0 — Copyright 2026 Danny Livshits. Provided without warranty;
-          use for diligence at your own risk.
-        </p>
-        <p class="about-links">
-          Expected Pages URL:
-          <a href="https://dannyliv.github.io/defops-scorecard/" rel="noopener">https://dannyliv.github.io/defops-scorecard/</a>
-        </p>
-      </div>
-    </section>
-  </main>
-
-  <footer class="site-footer">
-    <p>
-      DEFOPS Coverage Scorecard · local-only · Apache 2.0 © 2026 Danny Livshits ·
-      <a href="#about">About</a> ·
-      <a href="#data">Data &amp; privacy</a>
-    </p>
-  </footer>
+  </div>
 </body>
 </html>

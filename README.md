@@ -1,74 +1,80 @@
-# DEFOPS Coverage Scorecard
+# DEFOPS Evidence Review
 
-**Patch · Revoke · Reconstruct**
+DEFOPS (Defense Operations Coverage) helps a team document whether an agent deployment can be patched, have its access revoked, and have its actions reconstructed. It is a local-first self-assessment for operational diligence.
 
-Operational coverage scorecard for AI defense diligence. Scores whether *your* organization’s ops can close loops after agents and tools fail — not whether research benchmarks look good in isolation.
+[Open the app](https://dannyliv.github.io/defops-scorecard/#overview) · [Review a deployment](https://dannyliv.github.io/defops-scorecard/#dashboard)
 
-**Live (expected):** [https://dannyliv.github.io/defops-scorecard/](https://dannyliv.github.io/defops-scorecard/)
+## The decision this tool supports
 
-## What / why
+Define one system, its environment, an accountable owner, and the deployment boundary. Assess seven controls against explicit exercises. Record the test owner, date, evidence reference, outcome and observed result. A deployed-condition rating also requires a named reviewer.
 
-DEFOPS = defense operations coverage: can you **Patch** a known exploit path and prove it stays closed, **Revoke** agent/tool credentials and confirm they stay dead, and **Reconstruct** what happened when logs or summaries are incomplete or adversarial?
+The tool checks whether the entered records satisfy a review policy. It does not run security tests, inspect linked evidence, authenticate reviewers, certify compliance, approve a deployment, or predict attacks. A person must challenge the supporting evidence and make the decision.
 
-Use this for diligence on AI defense vendors and internal programs. Verdicts are **Fund**, **Gate**, or **Don’t fund**.
+## Seven controls
 
-Research leaderboards and staged demos measure capability under curated conditions. They do not prove production close-loop ownership. Independent evals on demoware inflate confidence. DEFOPS treats ops outcomes as first-class.
+| Control | Exercise |
+| --- | --- |
+| **Patch and recovery (required)** | Reproduce a weakness, deploy a fix, retest and verify rollback. |
+| **Identity and revocation (required)** | Stop an agent and retry its credentials on every scoped service. |
+| **Action reconstruction (required)** | Trace a consequential change to inputs, tool calls, permissions and approvals. |
+| Credential boundaries | Test an out-of-scope operation and a synthetic secret-exfiltration path. |
+| Tool and artifact provenance | Reject an unapproved tool or artifact before execution. |
+| Shared state isolation | Test whether hostile state crosses session or tenant boundaries. |
+| Evaluation fidelity | Exercise the declared deployment permissions and dependencies; record exclusions. |
 
-## Seven dimensions (0–3)
+A scope-dependent control can be excluded only with a rationale and an accountable owner. The three required controls cannot be excluded. An unassessed control stays distinct from a confirmed absent or failed control.
 
-1. **Patch / close loop** — Ship a fix from a known exploit path; prove it stays closed.
-2. **Agent identity & revocation** — Kill agent/tool credentials; confirm they stay dead.
-3. **Trajectory & summary integrity** — Logs/summaries resist spoof/omission; reconstruct events.
-4. **Credential & key lifecycle (AI APIs)** — Rotate, scope, detect leaks for model/tool keys.
-5. **Registry & publish controls** — Who can publish tools/skills/agents; review gates; supply-chain pins.
-6. **Shared-state / improvised-C2 detection** — Catch collusion via shared memory, files, side channels.
-7. **Independent eval fidelity** — Third-party/red-team evals match the production stack (not demoware).
+## Evidence rubric
 
-### Rubric
+| Score | Meaning |
+| --- | --- |
+| 0 | Absent or failed. |
+| 1 | Defined, not proven by a passing representative exercise. |
+| 2 | Representative exercise passed, with dated evidence and an owner. |
+| 3 | Passed in deployed conditions with evidence and a named reviewer. |
 
-| Score | Label |
-|------:|-------|
-| 0 | Missing / unknown |
-| 1 | Manual / ad hoc |
-| 2 | Documented process, partial automation |
-| 3 | Measured, owned, tested regularly |
+These are ordinal policy categories. No average, funding recommendation or security-coverage percentage is calculated. High scores in one control do not offset another control's failure.
 
-## Verdict rules
+## Review states
 
-Given the mean of **scored** dimensions and the count of scored dimensions at **0**:
+- **Incomplete:** required scope, assessments, exclusion justifications or evidence records are missing or invalid.
+- **Needs remediation:** an assessed control is below 2, records a failed exercise, or has evidence older than the selected policy. Known failures remain visible even if other information is missing.
+- **Ready for review:** every applicable control has a score of at least 2, a passing outcome, owner, dated evidence reference and observed result. A score of 3 also has a reviewer. All required controls pass these checks and the scope is complete.
 
-| Verdict | Rule |
-|---------|------|
-| **Fund** | mean ≥ 2.5 **and** no dimension at 0 |
-| **Don’t fund** | mean &lt; 1.5 **or** ≥ 2 dimensions at 0 |
-| **Gate** | everything else (including no scores yet) |
+Ready for review describes the completeness of self-reported records. It is not a claim that the evidence is authentic or sufficient for your threat model.
 
-## How to use
+Evidence age defaults to 90 days and can be set from 1 to 365 days. This is a configurable review policy, not a scientifically calibrated threshold. Future test dates never count as evidence.
 
-1. Open the site (local file server or GitHub Pages).
-2. Go to **Assessment** and score each dimension; notes auto-save to `localStorage`.
-3. Open **Dashboard** for the Chart.js radar, mean, and verdict.
-4. Optionally load sample profiles (**Research-demo** vs **Ops-ready**).
-5. On **Data**, export/import JSON, copy a SHA-256 of the export payload, or clear all.
+## Data and privacy
 
-### Local preview
+Scores, scope and evidence references save in this browser's local storage. No account, telemetry, remote model or application backend is required. The site serves its own application assets; it does not fetch evidence references. Anyone with access to the same browser profile can read the assessment. Keep credentials and sensitive incident logs out of the form. Browser storage can be cleared, so export important work.
 
-```bash
-cd defops-scorecard
-python3 -m http.server 8080
-# open http://localhost:8080
+- **Samples are isolated:** sample data has a persistent banner and never replaces your saved assessment. Its export retains the sample flag.
+- **Import previews are mandatory:** invalid or unrelated JSON is rejected before replacement. Applying a real assessment saves the previous assessment as a restore point. Imported sample files open in the isolated sample session.
+- **Restore:** recover the previous real assessment after replacement or clearing. This is one restore point, not a version history.
+- **Exact-byte export:** prepare one fixed JSON snapshot and its SHA-256 hash, then download those same bytes. Editing the assessment invalidates the snapshot. The hash supports file-integrity comparison, not proof of who created the evidence.
+- **Unreadable records:** autosave pauses if stored data cannot be validated. Download the original from Data before replacing it; explicit replacement retains the raw recovery copy.
+- **Migration:** recognizable v1 exports retain their self-reported scores and notes. They still need deployment scope and evidence under the revised rubric. The original legacy storage key remains untouched.
+
+## Development and checks
+
+```sh
+npm ci
+npm test
+npm run check
+python3 -m http.server 8766 --bind 127.0.0.1
 ```
 
-## Privacy
+Browser checks attach to an existing Chrome through its DevTools endpoint. They create and close their own tab and restore the assessment storage they touch.
 
-**Local-only, private by design.** Scores and notes never leave the browser. No telemetry, no accounts, no server storage. Export only if you choose to share a JSON file or its hash.
+```sh
+CDP_URL=http://127.0.0.1:9222 TEST_URL=http://127.0.0.1:8766 npm run test:browser
+```
 
-## Deploy (GitHub Pages)
+`js/model.js` contains the pure assessment rules and strict import validation. `js/app.js` owns forms, browser persistence, isolated samples, import previews and export snapshots. The regression tests use the same model functions as the interface. Browser tests exercise real controls and downloaded bytes.
 
-This repo includes `.github/workflows/pages.yml` (checkout → configure-pages → upload-pages-artifact from `.` → deploy-pages). Enable Pages with **GitHub Actions** as the source. The workflow runs on push to `main`/`master` and via `workflow_dispatch`.
-
-A `.nojekyll` file is included so static assets are served as-is.
+The Pages workflow runs checks before staging deployable assets and deploying pushes to `main`. Source, tests, planning documents and local evidence do not enter the Pages artifact.
 
 ## License
 
-Apache License 2.0 — Copyright 2026 Danny Livshits. Provided **without warranty**; use for diligence at your own risk. See [LICENSE](LICENSE).
+Apache License 2.0. Copyright 2026 Danny Livshits. See [LICENSE](LICENSE).

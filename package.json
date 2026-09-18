@@ -1,11 +1,11 @@
 {
   "name": "defops-scorecard",
-  "version": "1.0.0",
-  "description": "**Patch · Revoke · Reconstruct**",
+  "version": "2.0.0",
+  "description": "Evidence-based operational review for agent deployments",
   "scripts": {
-    "test": "playwright test",
-    "test:e2e": "playwright test",
-    "test:report": "playwright test && echo See e2e-report.md"
+    "test": "node --test tests/model.test.cjs",
+    "check": "node --check js/model.js && node --check js/app.js && node --check tests/browser.cjs",
+    "test:browser": "node tests/browser.cjs"
   },
   "keywords": [],
   "author": "Danny Livshits",

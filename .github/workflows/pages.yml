@@ -1,8 +1,8 @@
-name: Deploy to GitHub Pages
+name: Check and deploy DEFOPS
 
 on:
   push:
-    branches: ["main", "master"]
+    branches: ["main"]
   workflow_dispatch:
 
 permissions:
@@ -15,30 +15,49 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npm test && npm run check
+      - name: Install test browser
+        run: npx playwright install --with-deps chromium
+      - name: Start local server and CDP browser on the CI runner
+        run: |
+          python3 -m http.server 8766 --bind 127.0.0.1 > /tmp/defops-server.log 2>&1 &
+          CHROME_BIN=$(node -p "require('playwright').chromium.executablePath()")
+          "$CHROME_BIN" --headless --no-sandbox --remote-debugging-port=9222 --user-data-dir=/tmp/defops-browser about:blank > /tmp/defops-browser.log 2>&1 &
+          for attempt in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:9222/json/version >/dev/null && curl -fsS http://127.0.0.1:8766 >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          exit 1
+      - name: Exercise real controls and export integrity
+        run: npm run test:browser
+
   deploy:
+    needs: verify
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
+      - uses: actions/checkout@v4
       - name: Stage site files only
         run: |
           mkdir -p _site/css _site/js
-          cp index.html favicon.svg LICENSE README.md .nojekyll _site/
+          cp index.html favicon.svg LICENSE .nojekyll _site/
           cp css/styles.css _site/css/
-          cp js/app.js _site/js/
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+          cp js/app.js js/model.js _site/js/
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
         with:
           path: '_site'
-
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
