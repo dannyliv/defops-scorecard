@@ -93,9 +93,19 @@
   }
   function result() { return M.evaluate(current()); }
 
+  function policyFeedback(text = '', invalid = false) {
+    const field = $('policy-max-age');
+    const feedback = $('policy-feedback');
+    feedback.textContent = text;
+    feedback.hidden = !text;
+    feedback.classList.toggle('field-error', invalid);
+    if (invalid) field.setAttribute('aria-invalid', 'true');
+    else field.removeAttribute('aria-invalid');
+  }
   function renderScope() {
     for (const key of ['system','environment','owner','boundary']) $('scope-' + key).value = current().scope[key];
     $('policy-max-age').value = current().policy.maxAgeDays;
+    policyFeedback();
   }
   function renderNav() {
     const report = result();
@@ -239,10 +249,19 @@
     if(id.startsWith('scope-'))current().scope[id.slice(6)]=e.target.value;
     if(id==='policy-max-age') {
       const value=Number(e.target.value);
-      if(!Number.isInteger(value)||value<1||value>365)return;
+      if(!Number.isInteger(value)||value<1||value>365) {
+        policyFeedback(`Enter a whole number from 1 to 365. Active policy remains ${current().policy.maxAgeDays} days.`,true);
+        return;
+      }
+      policyFeedback();
       current().policy.maxAgeDays=value;
     }
     changed();
+  });
+  $('policy-max-age').addEventListener('blur',()=>{
+    if($('policy-max-age').getAttribute('aria-invalid')!=='true')return;
+    $('policy-max-age').value=current().policy.maxAgeDays;
+    policyFeedback(`Restored the active policy of ${current().policy.maxAgeDays} days. Enter a whole number from 1 to 365 to change it.`);
   });
   $('control-nav').addEventListener('click',e=>{
     const button=e.target.closest('[data-control]');if(!button)return;

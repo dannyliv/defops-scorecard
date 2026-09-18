@@ -33,6 +33,26 @@ const base = process.env.TEST_URL || 'http://127.0.0.1:8766';
       assert.equal(await page.locator('#scope-system').inputValue(),'Browser regression assessment');
       assert.equal(await page.locator('[data-score="3"]').getAttribute('aria-pressed'),'true');
     });
+    await check('invalid freshness policy reports the active value and restores it on blur',async()=>{
+      const policy=page.locator('#policy-max-age');
+      const feedback=page.locator('#policy-feedback');
+      for(const invalid of ['366','']) {
+        await policy.fill(invalid);
+        assert.equal(await policy.getAttribute('aria-invalid'),'true');
+        assert.match(await feedback.innerText(),/Active policy remains 90 days/);
+        assert.equal(await page.evaluate(()=>JSON.parse(localStorage.getItem('defops-scorecard-v2')).policy.maxAgeDays),90);
+        await page.locator('#scope-owner').focus();
+        assert.equal(await policy.inputValue(),'90');
+        assert.equal(await policy.getAttribute('aria-invalid'),null);
+        assert.match(await feedback.innerText(),/Restored the active policy of 90 days/);
+      }
+      await policy.fill('0');
+      await policy.fill('120');
+      assert.equal(await policy.getAttribute('aria-invalid'),null);
+      assert.equal(await feedback.isVisible(),false);
+      assert.equal(await page.evaluate(()=>JSON.parse(localStorage.getItem('defops-scorecard-v2')).policy.maxAgeDays),120);
+      await policy.fill('90');
+    });
     await check('demo stays isolated from real assessment',async()=>{
       await page.locator('a[data-nav="overview"]').click();await page.locator('#load-sample').click();
       assert.equal(await page.locator('#demo-banner').isVisible(),true);

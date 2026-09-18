@@ -6,3 +6,5 @@
 /* Keep navigation metadata readable in every state. */
 .rail-label > span, .nav-index { color: #4a514b; opacity: 1; }
 a[aria-current="page"] .nav-index { color: #f4f2eb; }
+
+.field-error{color:var(--red)}input[aria-invalid="true"]{border-color:var(--red)}
